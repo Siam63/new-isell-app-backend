@@ -8,11 +8,21 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 
 const port = 5000;
+const userRoute = require("./routes/users");
+const authRoute = require("./routes/auth");
 
+// Middleware - function that receives the req and res objects
 app.use(express.json());
+app.use(helmet());
+app.use(morgan("common"));
 
-mongoose.connect(process.env.MONGO_URL, {useNewUrlParser: true, useUnifiedTopology: true}, ()=> {
-    console.log("Connected to MongoDB!");
+mongoose.connect(process.env.MONGO_URL, {useNewUrlParser: true, useUnifiedTopology: true}, (error)=> {
+    // console.log("Connected to MongoDB!");
+    if(error){
+        console.log("Error: Authentication Failed.");
+    }else{
+        console.log("Connected to MongoDB!");
+    }
 });
 
 const users = [
@@ -57,6 +67,9 @@ const posts = [
     }
 ]
 
+app.use("/api/users", userRoute);
+app.use("/api/auth", authRoute);
+
 function validateUser(user){
     const schema = {
         name: Joi.string().min(2).required()
@@ -78,7 +91,7 @@ function validatePost(post){
 
 
 // Routes
-app.get('/', (req, res) => res.send("Hello world!"));
+app.get('/', (req, res) => res.send("This is the homepage."));
 app.listen(port, () => console.log(`Backend server is running on port ${port}`));
 
 app.get('/users', (req, res) => {
@@ -110,7 +123,7 @@ app.post('/posts', (req, res) => {
     if(error) return res.status(400).send(error.details[0].message);
 
     const post = {
-        id: users.length + 1,
+        id: posts.length + 1,
         title: req.body.title,
         description: req.body.description,
         condition: req.body.condition,
