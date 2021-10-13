@@ -10,6 +10,7 @@ const morgan = require('morgan');
 const port = 5000;
 const userRoute = require("./routes/users");
 const authRoute = require("./routes/auth");
+const postRoute = require("./routes/post");
 
 // Middleware - function that receives the req and res objects
 app.use(express.json());
@@ -17,7 +18,6 @@ app.use(helmet());
 app.use(morgan("common"));
 
 mongoose.connect(process.env.MONGO_URL, {useNewUrlParser: true, useUnifiedTopology: true}, (error)=> {
-    // console.log("Connected to MongoDB!");
     if(error){
         console.log("Error: Authentication Failed.");
     }else{
@@ -25,50 +25,9 @@ mongoose.connect(process.env.MONGO_URL, {useNewUrlParser: true, useUnifiedTopolo
     }
 });
 
-const users = [
-    {
-        id: 1,
-        name: "Siam Rahman",
-        posts: 3
-    },
-    {
-        id: 2,
-        name: "Sam Kurt",
-        posts: 1
-    },
-    {
-        id: 3,
-        name: "Eric Cartman",
-        posts: 2
-    }
-]
-
-const posts = [
-    {
-        id: 1,
-        title: "Pokemon Booster Box",
-        description: "Brand new, sealed.",
-        condition: "Brand New",
-        price: 250
-    },
-    {
-        id: 2,
-        title: "iPhone 6 for sale!",
-        description: "Used, but in great condition. Comes with original everything.",
-        condition: "User - Like New",
-        price: 150
-    },
-    {
-        id: 3,
-        title: "AirPods Gen 1",
-        description: "Brand new, sealed.",
-        condition: "Brand New",
-        price: 150
-    }
-]
-
 app.use("/api/users", userRoute);
 app.use("/api/auth", authRoute);
+app.use("/api/post", postRoute);
 
 function validateUser(user){
     const schema = {

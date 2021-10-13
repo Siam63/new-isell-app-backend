@@ -10,6 +10,8 @@
   "license": "ISC",
   "dependencies": {
     "@hapi/joi": "^15.0.3",
+    "bcrpyt": "^2.0.0",
+    "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
     "debug": "^4.3.2",
     "dotenv": "^10.0.0",
