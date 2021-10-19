@@ -48,7 +48,6 @@ function validatePost(post){
     return Joi.validate(post, schema);
 }
 
-
 // Routes
 app.get('/', (req, res) => res.send("This is the homepage."));
 app.listen(port, () => console.log(`Backend server is running on port ${port}`));
